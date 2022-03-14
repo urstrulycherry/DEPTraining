@@ -192,3 +192,6 @@ src/com/cherry/practise/Project2.java
 src/com/cherry/practise/Proto.java
 src/com/cherry/practise/T.java
 src/com/cherry/practise/Test.java
+.classpath
+.gitignore
+.project
