@@ -5,6 +5,7 @@ interface IAdapter {
 }
 
 class AmericanSocket {
+
 	IAdapter a;
 
 	AmericanSocket(IAdapter a) {
