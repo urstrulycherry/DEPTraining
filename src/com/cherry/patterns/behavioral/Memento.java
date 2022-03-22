@@ -41,7 +41,6 @@ public class Memento {
 
 		Msg msg = new Msg();
 
-		// time travel and record the eras
 		msg.set("Hai");
 		msgStates.add(msg.saveToMemento());
 		System.out.println();

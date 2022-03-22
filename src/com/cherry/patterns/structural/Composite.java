@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface Component {
+
+	int getPrice();
+
 	void showPrice();
+
+}
+
+class Vars {
+	static int space = 0;
 }
 
 class Leaf implements Component {
@@ -22,13 +30,22 @@ class Leaf implements Component {
 
 	@Override
 	public void showPrice() {
+		for (int i = 0; i < Vars.space; i++) {
+			System.out.print("\t");
+		}
 		System.out.println("Name: " + name + ", Price: " + price);
+	}
+
+	@Override
+	public int getPrice() {
+		return price;
 	}
 
 }
 
 class Group implements Component {
 	String name;
+	int price = 0;
 	List<Component> group = new ArrayList<Component>();
 
 	void addComponent(Component component) {
@@ -41,11 +58,24 @@ class Group implements Component {
 
 	@Override
 	public void showPrice() {
-
+		for (int i = 0; i < Vars.space; i++) {
+			System.out.print("\t");
+		}
+		System.out.println("Group: " + name);
 		for (Component component : group) {
+			Vars.space++;
 			component.showPrice();
+			Vars.space--;
 		}
 
+	}
+
+	@Override
+	public int getPrice() {
+		for (Component component : group) {
+			price += component.getPrice();
+		}
+		return price;
 	}
 
 }
@@ -76,7 +106,8 @@ public class Composite {
 		pc.addComponent(pp);
 		pc.addComponent(cb);
 
-		motherBoard.showPrice();
+		pc.showPrice();
+		System.out.println("Total Price: " + pc.getPrice());
 
 	}
 }
