@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface ISubscriber {
-	void update(Channel c, String s);
+	void update(IChannel c, String s);
 }
 
 interface IChannel {
@@ -13,6 +13,8 @@ interface IChannel {
 	void unSubscribe(ISubscriber s);
 
 	void notifySub(String title);
+
+	String getName();
 }
 
 class Channel implements IChannel {
@@ -23,6 +25,7 @@ class Channel implements IChannel {
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -53,7 +56,7 @@ class Subscriber implements ISubscriber {
 	}
 
 	@Override
-	public void update(Channel c, String s) {
+	public void update(IChannel c, String s) {
 		System.out.println("Hello " + name + ", new video from " + c.getName() + ", Title: " + s);
 	}
 
@@ -67,7 +70,7 @@ class PremiumSubscriber implements ISubscriber {
 	}
 
 	@Override
-	public void update(Channel c, String s) {
+	public void update(IChannel c, String s) {
 		System.out.println("Hello " + name + ", new video from " + c.getName() + ", Title: " + s);
 	}
 }
