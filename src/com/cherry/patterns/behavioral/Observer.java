@@ -3,12 +3,23 @@ package com.cherry.patterns.behavioral;
 import java.util.ArrayList;
 import java.util.List;
 
-class Channel {
+interface ISubscriber {
+	void update(Channel c, String s);
+}
+
+interface IChannel {
+	void subscribe(ISubscriber s);
+
+	void unSubscribe(ISubscriber s);
+
+	void notifySub(String title);
+}
+
+class Channel implements IChannel {
 	private String name;
-	List<Subscriber> subs = new ArrayList<>();
+	List<ISubscriber> subs = new ArrayList<>();
 
 	public Channel(String name) {
-		super();
 		this.name = name;
 	}
 
@@ -16,67 +27,67 @@ class Channel {
 		return name;
 	}
 
-	void subscribe(Subscriber s) {
+	@Override
+	public void subscribe(ISubscriber s) {
 		subs.add(s);
 	}
 
-	void unSubscribe(Subscriber s) {
+	@Override
+	public void unSubscribe(ISubscriber s) {
 		subs.remove(subs.indexOf(s));
 	}
 
+	@Override
 	public void notifySub(String title) {
-		for (Subscriber s : subs) {
+		for (ISubscriber s : subs) {
 			s.update(this, title);
 		}
 	}
-
 }
 
-class Subscriber {
+class Subscriber implements ISubscriber {
 	private String name;
-	List<Channel> channels = new ArrayList<Channel>();
 
 	public Subscriber(String name) {
-		super();
 		this.name = name;
 	}
 
-	void subscribe(Channel c) {
-		channels.add(c);
-		c.subscribe(this);
-	}
-
-	void unsubscribe(Channel c) {
-		channels.remove(channels.indexOf(c));
-		c.unSubscribe(this);
-	}
-
-	void update(Channel c, String s) {
+	@Override
+	public void update(Channel c, String s) {
 		System.out.println("Hello " + name + ", new video from " + c.getName() + ", Title: " + s);
 	}
 
 }
 
+class PremiumSubscriber implements ISubscriber {
+	private String name;
+
+	public PremiumSubscriber(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void update(Channel c, String s) {
+		System.out.println("Hello " + name + ", new video from " + c.getName() + ", Title: " + s);
+	}
+}
+
 public class Observer {
 	public static void main(String[] args) {
-		Channel c1 = new Channel("Epam Global");
-		Channel c2 = new Channel("Epam India");
-		Subscriber s1 = new Subscriber("Charan");
-		Subscriber s2 = new Subscriber("Raj");
-		Subscriber s3 = new Subscriber("Nithesh");
+		IChannel c1 = new Channel("Epam Global");
+		IChannel c2 = new Channel("Epam India");
 
-		s1.subscribe(c1);
-		s2.subscribe(c1);
+		ISubscriber s1 = new Subscriber("Charan");
+		ISubscriber s2 = new PremiumSubscriber("Raj");
+		ISubscriber s3 = new Subscriber("Nithesh");
 
-		s1.subscribe(c2);
-		s3.subscribe(c2);
+		c1.subscribe(s1);
+		c2.subscribe(s3);
 
 		c1.notifySub("Welcome to EPAM Global");
 		System.out.println();
 		c2.notifySub("A1 to A2 movement");
-
-		s3.unsubscribe(c2);
-
+		c2.subscribe(s2);
 		System.out.println();
 		c2.notifySub("A2 to A3 movement");
 	}
